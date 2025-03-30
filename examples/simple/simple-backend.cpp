@@ -16,6 +16,7 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
+#include <ggml-xlns.h>
 #include <map>
 #include <string>
 #include <vector>
@@ -60,6 +61,13 @@ void load_model(simple_model & model, float * a, float * b, int rows_A, int cols
     model.backend = ggml_backend_metal_init();
     if (!model.backend) {
         fprintf(stderr, "%s: ggml_backend_metal_init() failed\n", __func__);
+    }
+#endif
+#ifdef GGML_USE_XLNS
+    fprintf(stderr, "%s: using XLNS backend\n", __func__);
+    model.backend = ggml_backend_xlns_init();
+    if (!model.backend) {
+        fprintf(stderr, "%s: ggml_backend_xlns_init() failed\n", __func__);
     }
 #endif
 

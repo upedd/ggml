@@ -53,6 +53,10 @@
 #include "ggml-blas.h"
 #endif
 
+#ifdef GGML_USE_XLNS
+#include "ggml-xlns.h"
+#endif
+
 #ifdef GGML_USE_RPC
 #include "ggml-rpc.h"
 #endif
@@ -173,6 +177,9 @@ struct ggml_backend_registry {
 #endif
 #ifdef GGML_USE_BLAS
         register_backend(ggml_backend_blas_reg());
+#endif
+#ifdef GGML_USE_XLNS
+        register_backend(ggml_backend_xlns_reg());
 #endif
 #ifdef GGML_USE_RPC
         register_backend(ggml_backend_rpc_reg());
@@ -560,6 +567,8 @@ void ggml_backend_load_all_from_path(const char * dir_path) {
 #endif
 
     ggml_backend_load_best("blas", silent, dir_path);
+    ggml_backend_load_best("xlns", silent, dir_path);
+
     ggml_backend_load_best("cann", silent, dir_path);
     ggml_backend_load_best("cuda", silent, dir_path);
     ggml_backend_load_best("hip", silent, dir_path);
