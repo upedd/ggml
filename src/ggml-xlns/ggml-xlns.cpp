@@ -3,8 +3,8 @@
 #include "ggml-backend-impl.h"
 #include "ggml-xlns.h"
 
-#define xlns32_ideal
-#include "xlns32.cpp"
+#define xlns16_ideal
+#include "xlns16.cpp"
 
 // === Based on the BLAS backend
 // TODO: support more operations
@@ -23,13 +23,13 @@ static void ggml_backend_xlns_mul_mat(ggml_backend_xlns_context* context, struct
 
     for (int i = 0; i < src0->ne[1]; ++i) {
         for (int j = 0; j < src1->ne[1]; ++j) {
-            xlns32_float sum = float2xlns32_(0.0);
+            xlns16_float sum = float2xlns16_(0.0);
             for (int k = 0; k < src0->ne[0]; ++k) {
                 auto lhs = src0_data[i * src0->ne[0] + k];
                 auto rhs = src1_data[j * src0->ne[0] + k];
                 sum += lhs * rhs;
             }
-            dst_data[j * src0->ne[1] + i] = xlns32_2float(sum);
+            dst_data[j * src0->ne[1] + i] = xlns16_2float(sum);
         }
     }
 }
